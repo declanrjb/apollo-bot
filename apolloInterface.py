@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[482]:
+# In[20]:
 
 
 import requests
@@ -11,13 +11,13 @@ import datetime
 import re
 
 
-# In[483]:
+# In[21]:
 
 
 apollo_tag = 'x03gq'.upper()
 
 
-# In[484]:
+# In[22]:
 
 
 def get_theaters(movie):
@@ -39,7 +39,7 @@ def simplify_trailer(trailers):
         return None
 
 
-# In[485]:
+# In[23]:
 
 
 def get_screenings(movies):
@@ -58,7 +58,7 @@ def get_screenings(movies):
 
     response = requests.post(
         'https://www.clevelandcinemas.com/api/gatsby-source-boxofficeapi/schedule',
-        cookies=cookies,
+        #cookies=cookies,
         headers=headers,
         data=data,
     )
@@ -76,7 +76,7 @@ def get_screenings(movies):
     return pd.DataFrame(screenings)
 
 
-# In[486]:
+# In[24]:
 
 
 def screening_time(dt):
@@ -89,7 +89,7 @@ def showtimes_on_date(screenings, date):
     for film in screenings['title']}
 
 
-# In[487]:
+# In[25]:
 
 
 def get_movie_headers():
@@ -117,7 +117,7 @@ def get_movie_headers():
     return df
 
 
-# In[488]:
+# In[26]:
 
 
 def showtimes_in_range(start, end):
@@ -132,7 +132,7 @@ def showtimes_in_range(start, end):
     return {date: showtimes_on_date(screenings, date) for date in dates}
 
 
-# In[445]:
+# In[27]:
 
 
 def format_response(screenings):
@@ -145,4 +145,14 @@ def format_response(screenings):
                 response += f'**{film}**: {times}\n'
             response += '\n'
     return response.strip()
+
+
+# In[28]:
+
+
+def date_for_day(target):
+    week = pd.date_range(datetime.datetime.today(), datetime.datetime.today() + datetime.timedelta(days=6))
+    for day in week:
+        if day.strftime('%A').lower() == target:
+            return day.strftime('%Y-%m-%d')
 
