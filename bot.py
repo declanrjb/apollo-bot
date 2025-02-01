@@ -59,7 +59,9 @@ async def on_message(message):
                 schedule = ai.showtimes_in_range(target_date, target_date)
             
             outbound_message = ai.format_response(schedule)
-
-            await channel.send(outbound_message)
+            if len(outbound_message) == 0:
+                await channel.send(f'There are no showtimes available on {target_date}.')
+            else:
+                await channel.send(outbound_message)
 
 bot.run(os.getenv('BOT_TOKEN'))
